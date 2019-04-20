@@ -1,34 +1,9 @@
 import numpy as np
-import random
-import seaborn as sns
-import matplotlib
 import matplotlib.pyplot as plt
-import timeit
 import time
-import operator
-import decimal
 
-import os
-import pickle
-import shutil
+import cmaes as cmaes
 
-# import gpflow
-# from gpflow import kernels
-
-#import import_ipynb
-#import data_management as data_management
-from sklearn.preprocessing import StandardScaler
-
-import Models.cmaes as cmaes
-#import cmaes as cmaes
-
-
-# Test
-
-
-# images,labels = data_management.get_data(fn = "Input_Dataset/input_data.csv",samples=85) 
-# sc = StandardScaler()
-# images = sc.fit_transform(np.float64(images))
 
 
 def timerfunc(func):
@@ -50,52 +25,6 @@ def timerfunc(func):
         return value
     return function_timer
 
-
-#@timerfunc
-def sum_of_squares_hp():
-    return np.array([[-20,20],[-20,20],[-20,20],[-20,20],[-20,20]])
-
-
-
-def ackley_hp():
-    return np.array([[-32.768,32.768],[-32.768,32.768]])
-    #return [np.arange(-32.768, 32.768), np.arange(-32.768, 32.768)] # evaluation on hypercube
-
-
-
-# def get_kernel(hp):
-#     latents = int(hp[0])
-    
-#     k = [kernels.RBF(input_dim=latents, ARD=True),kernels.Periodic(input_dim=latents),
-#          kernels.Linear(input_dim=latents),kernels.White(input_dim=latents)]
-    
-#     kern = [k[i-1] for i in range(1,4) if hp[i] >= 0.5]
-    
-#     # if all values are < 0.5
-#     if len(kern) == 0:
-#         max_hp = np.argmax(hp[1:4])
-#         kernel = k[max_hp]
-#     else:
-#         kernel = kernels.Sum([kern[i] for i in range(len(kern))])
-    
-#     return kernel
-
-
-# ### Objective Functions
-
-
-#@timerfunc
-def sum_of_squares(hyperparameters): # minimum: 0
-    # 1D
-    #return np.sum(x**2 for x in [hyperparameters])
-    return np.sum([x**2 for x in hyperparameters])
-
-
-
-def ackley(x): # minimum: 0
-        arg1 = -0.2 * np.sqrt(0.5 * (x[0] ** 2 + x[1] ** 2))     
-        arg2 = 0.5 * (np.cos(2. * np.pi * x[0]) + np.cos(2. * np.pi * x[1]))
-        return -20. * np.exp(arg1) - np.exp(arg2) + 20. + np.e
 
 
 # ### Optimizer
@@ -223,34 +152,4 @@ def adaptive_lipo(n, t_max, hyperparameters, f):
     min_obj = np.argmin(fx) # model position of minimum object
     print('Minimum: ', np.amin(fx), ' for X: ', X[min_obj], ' with k: ', k[min_obj])
     return min_obj, X[min_obj]
-    
-#     models_dir = './Models/gplvm_models/'
-#     models_filename = models_dir + str(min_obj)
-    
-#     fm_dir = './Models/Trained_Models/'
-    
-#     files = os.listdir(fm_dir) 
-#     number_files = len(files)
-#     fm_filename = fm_dir + str(number_files-1) #+1?
-#     while os.path.isfile(fm_filename):
-#         fm_filename = fm_dir + str(number_files+1)
-    
-#     shutil.copy(models_filename,fm_dir)
-    
-#     old_name = fm_dir + str(min_obj)
-#     os.rename(old_name,fm_filename)
-    
-#     # delete files in models_dir:
-#     for file_object in os.listdir(models_dir):
-#         file_object_path = os.path.join(models_dir, file_object)
-#         if os.path.isfile(file_object_path):
-#             os.unlink(file_object_path)
-
-#     return fm_filename
-
-
-# Test
-
-# hyperparameters = sum_of_squares_hp()
-# adaptive_lipo(10,100,hyperparameters,sum_of_squares)
 
